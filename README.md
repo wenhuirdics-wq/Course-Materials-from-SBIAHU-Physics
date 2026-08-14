@@ -1,5 +1,7 @@
 # 本仓库资料由安大石溪学院应用物理学24级在读学长个人整理。
 
+检索网站：https://wenhuirdics-wq.github.io/Course-Materials-from-SBIAHU-Physics/
+
 我的专业成绩排名前十，希望可以帮助到学弟学妹。
 
 资料打包在 **Releases** 中，内容包括：
