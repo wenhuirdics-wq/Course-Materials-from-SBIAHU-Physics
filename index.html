@@ -100,32 +100,44 @@
     h1 {
       margin: 0;
       font-family: Georgia, "Noto Serif SC", "Songti SC", serif;
-      font-size: clamp(42px, 7vw, 76px);
+      font-size: clamp(42px, 6vw, 70px);
       line-height: 1.08;
       letter-spacing: -.045em;
       font-weight: 650;
+      white-space: nowrap;
     }
 
     .intro {
-      max-width: 680px;
+      max-width: none;
       margin: 24px 0 0;
       color: var(--muted);
       font-size: clamp(16px, 2vw, 19px);
       line-height: 1.85;
+      white-space: nowrap;
     }
 
     .stats {
       display: flex;
-      gap: 32px;
+      align-items: baseline;
+      gap: 38px;
       margin-top: 30px;
       color: var(--muted);
       font-size: 14px;
     }
 
+    .stats > span {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
     .stats strong {
       color: var(--ink);
       font-size: 22px;
-      margin-right: 5px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
     }
 
     .finder {
@@ -286,7 +298,7 @@
     .course:hover .arrow { transform: translateX(3px); }
 
     .empty {
-      display: none;
+      display: block;
       padding: 70px 24px;
       border: 1px dashed rgba(23, 32, 28, .2);
       border-radius: 20px;
@@ -295,8 +307,21 @@
       grid-column: 1 / -1;
     }
 
+    .status-card {
+      grid-column: 1 / -1;
+      padding: 52px 24px;
+      border: 1px dashed rgba(23, 32, 28, .2);
+      border-radius: 20px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .status-card a { color: var(--accent); text-underline-offset: 3px; }
+
     footer {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 24px;
       padding: 28px 0 44px;
@@ -307,10 +332,13 @@
     }
 
     footer p { margin: 0; }
+    footer .notice { white-space: nowrap; }
+    footer .owner { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
     footer a { color: var(--accent); text-underline-offset: 3px; }
 
     @media (max-width: 780px) {
       .hero { padding-top: 45px; }
+      h1, .intro { white-space: normal; }
       .grid { grid-template-columns: repeat(2, 1fr); }
       .repo-link span { display: none; }
     }
@@ -319,11 +347,12 @@
       .shell { width: min(100% - 22px, 1080px); }
       header { padding: 18px 0; }
       .hero { padding: 40px 4px 36px; }
-      .stats { gap: 18px; }
+      .stats { gap: 18px; flex-wrap: wrap; }
       .finder { top: 7px; border-radius: 18px; padding: 10px; }
       .grid { grid-template-columns: 1fr; gap: 10px; }
       .course { min-height: 138px; }
       footer { flex-direction: column; }
+      footer .notice { white-space: normal; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -347,12 +376,12 @@
     <main id="top">
       <section class="hero">
         <p class="eyebrow">Course Materials Index</p>
-        <h1>课程资料，<br>一搜即达。</h1>
+        <h1>课程资料，一搜即达。</h1>
         <p class="intro">安大石溪学院应用物理课程资料个人整理。选择学期或搜索课程名称，点击卡片即可下载对应资料包。</p>
         <div class="stats" aria-label="资料统计">
-          <span><strong id="course-total">24</strong>门课程</span>
-          <span><strong>6</strong>个分类</span>
-          <span>持续更新</span>
+          <span><strong id="course-total">—</strong>份资料</span>
+          <span><strong id="release-total">—</strong>个分类</span>
+          <span><strong>实时</strong>同步</span>
         </div>
       </section>
 
@@ -375,28 +404,50 @@
     </main>
 
     <footer>
-      <p>资料仅用于个人学习交流，请勿用于商业用途。<br>部分资料可能不完整，请以任课教师要求为准。</p>
-      <p>维护者：Mr. Radics<br><a href="mailto:Radics_in_sbiahu@outlook.com">联系邮箱</a></p>
+      <p class="notice">资料仅供个人学习交流，请勿商用；部分资料可能不完整，请以任课教师要求为准。</p>
+      <p class="owner"><span>维护者 · Mr. Radics</span><span aria-hidden="true">·</span><a href="mailto:Radics_in_sbiahu@outlook.com">联系邮箱</a></p>
     </footer>
   </div>
 
   <script>
     const repository = 'https://github.com/wenhuirdics-wq/Course-Materials-from-SBIAHU-Physics';
-    const groups = [
-      { semester: '大一上', tag: 'freshman-fall-v1', courses: ['应用微积分I、II', '思政', '军事理论'] },
-      { semester: '大一下', tag: 'freshman-spring-v1', courses: ['线性代数', '应用微积分III', '经典物理II', '经典物理实验II', '中国近现代史纲要'] },
-      { semester: '大二上', tag: 'sophomore-fall-v1', courses: ['物理与天文学的计算方法', '大学艺术', '近代物理', '近代物理实验', '数理方程', '应用微积分IV', '习概', '毛概'] },
-      { semester: '大二下', tag: 'sophomore-spring-v1', courses: ['电磁学理论I', '波和光学', '马原', '概率论'] },
-      { semester: '英语与选修', tag: 'english-electives-v1', courses: ['WAE 192', 'WAE 194', '材料科学基础'] },
-      { semester: '其他', tag: 'other-resources-v1', courses: ['高数额外资料'] }
+    const releasesApi = 'https://api.github.com/repos/wenhuirdics-wq/Course-Materials-from-SBIAHU-Physics/releases?per_page=100';
+    const preferredOrder = ['大一上', '大一下', '大二上', '大二下', '英语与选修', '其他'];
+    const displayAliases = {
+      'applied-calculus-1-2.zip': '应用微积分I、II',
+      'ideological-politics.zip': '思政',
+      'military-theory.zip': '军事理论',
+      'linear-algebra.zip': '线性代数',
+      'applied-calculus-3.zip': '应用微积分III',
+      'classical-physics-2.zip': '经典物理II',
+      'classical-physics-lab-2.zip': '经典物理实验II',
+      'modern-chinese-history.zip': '中国近现代史纲要',
+      'computational-physics-astronomy.zip': '物理与天文学的计算方法',
+      'university-art.zip': '大学艺术',
+      'modern-physics.zip': '近代物理',
+      'modern-physics-lab.zip': '近代物理实验',
+      'mathematical-equations.zip': '数理方程',
+      'applied-calculus-4.zip': '应用微积分IV',
+      'xi-thought.zip': '习概',
+      'maoism.zip': '毛概',
+      'electromagnetism-1.zip': '电磁学理论I',
+      'waves-optics.zip': '波和光学',
+      'marxist-principles.zip': '马原',
+      'probability.zip': '概率论',
+      'wae-192.zip': 'WAE 192',
+      'wae-194.zip': 'WAE 194',
+      'materials-science.zip': '材料科学基础',
+      'advanced-math-extra.zip': '高数额外资料'
+    };
+    const preferredCourseOrder = [
+      '应用微积分I、II', '思政', '军事理论',
+      '线性代数', '应用微积分III', '经典物理II', '经典物理实验II', '中国近现代史纲要',
+      '物理与天文学的计算方法', '大学艺术', '近代物理', '近代物理实验', '数理方程', '应用微积分IV', '习概', '毛概',
+      '电磁学理论I', '波和光学', '马原', '概率论',
+      'WAE 192', 'WAE 194', '材料科学基础', '高数额外资料'
     ];
-
-    const courses = groups.flatMap(group => group.courses.map(name => ({
-      name,
-      semester: group.semester,
-      tag: group.tag,
-      url: `${repository}/releases/download/${group.tag}/${encodeURIComponent(name + '.zip')}`
-    })));
+    let groups = [];
+    let courses = [];
 
     const filters = document.querySelector('.filters');
     const grid = document.querySelector('#course-grid');
@@ -406,28 +457,48 @@
     const title = document.querySelector('#results-title');
     let activeSemester = '全部';
 
-    ['全部', ...groups.map(group => group.semester)].forEach(semester => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = `filter${semester === '全部' ? ' active' : ''}`;
-      button.textContent = semester;
-      button.setAttribute('aria-pressed', semester === '全部');
-      button.addEventListener('click', () => {
-        activeSemester = semester;
-        document.querySelectorAll('.filter').forEach(item => {
-          const selected = item.textContent === semester;
-          item.classList.toggle('active', selected);
-          item.setAttribute('aria-pressed', selected);
+    function buildFilters() {
+      filters.innerHTML = '';
+      ['全部', ...groups.map(group => group.semester)].forEach(semester => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `filter${semester === activeSemester ? ' active' : ''}`;
+        button.textContent = semester;
+        button.setAttribute('aria-pressed', semester === activeSemester);
+        button.addEventListener('click', () => {
+          activeSemester = semester;
+          document.querySelectorAll('.filter').forEach(item => {
+            const selected = item.textContent === semester;
+            item.classList.toggle('active', selected);
+            item.setAttribute('aria-pressed', selected);
+          });
+          render();
         });
-        render();
+        filters.appendChild(button);
       });
-      filters.appendChild(button);
-    });
+    }
 
     function escapeHtml(text) {
-      return text.replace(/[&<>"]/g, character => ({
+      return String(text).replace(/[&<>"]/g, character => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'
       })[character]);
+    }
+
+    function displayName(fileName) {
+      return displayAliases[fileName.toLowerCase()] || fileName.replace(/\.(?:zip|rar|7z|tar\.gz)$/i, '');
+    }
+
+    function fileType(fileName) {
+      const match = fileName.match(/\.([^.]+)$/);
+      return match ? match[1].toUpperCase() : '文件';
+    }
+
+    function formatBytes(bytes) {
+      if (!Number.isFinite(bytes) || bytes <= 0) return '';
+      const units = ['B', 'KB', 'MB', 'GB'];
+      const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+      const value = bytes / Math.pow(1024, index);
+      return `${value >= 10 || index === 0 ? value.toFixed(0) : value.toFixed(1)} ${units[index]}`;
     }
 
     function render() {
@@ -443,14 +514,75 @@
       clear.style.display = input.value ? 'block' : 'none';
 
       grid.innerHTML = visible.map(course => `
-        <a class="course" href="${course.url}" title="下载 ${escapeHtml(course.name)}" aria-label="下载 ${escapeHtml(course.name)} 资料包">
+        <a class="course" href="${escapeHtml(course.url)}" title="下载 ${escapeHtml(course.fileName)}" aria-label="下载 ${escapeHtml(course.fileName)}">
           <div>
             <span class="semester">${escapeHtml(course.semester)}</span>
             <div class="course-name">${escapeHtml(course.name)}</div>
           </div>
-          <div class="download"><span>下载 ZIP 资料包</span><span class="arrow" aria-hidden="true">→</span></div>
+          <div class="download"><span>下载 ${escapeHtml(course.type)}${course.size ? ` · ${escapeHtml(course.size)}` : ''}</span><span class="arrow" aria-hidden="true">→</span></div>
         </a>
       `).join('') + (visible.length ? '' : '<div class="empty">没有找到相关课程，换个关键词试试。</div>');
+    }
+
+    async function loadReleases() {
+      grid.innerHTML = '<div class="status-card">正在同步 GitHub Releases 中的真实资料……</div>';
+      count.textContent = '正在同步';
+
+      try {
+        const response = await fetch(releasesApi, {
+          headers: { Accept: 'application/vnd.github+json' },
+          cache: 'no-store'
+        });
+        if (!response.ok) throw new Error(`GitHub API ${response.status}`);
+
+        const releases = await response.json();
+        groups = releases
+          .filter(release => !release.draft && Array.isArray(release.assets) && release.assets.length)
+          .map(release => ({
+            semester: release.name || release.tag_name,
+            tag: release.tag_name,
+            releaseUrl: release.html_url,
+            courses: release.assets
+              .filter(asset => asset.state === 'uploaded')
+              .map(asset => ({
+                name: displayName(asset.name),
+                fileName: asset.name,
+                semester: release.name || release.tag_name,
+                tag: release.tag_name,
+                url: asset.browser_download_url,
+                type: fileType(asset.name),
+                size: formatBytes(asset.size)
+              }))
+              .sort((a, b) => {
+                const aIndex = preferredCourseOrder.indexOf(a.name);
+                const bIndex = preferredCourseOrder.indexOf(b.name);
+                if (aIndex === -1 && bIndex === -1) return a.name.localeCompare(b.name, 'zh-CN');
+                if (aIndex === -1) return 1;
+                if (bIndex === -1) return -1;
+                return aIndex - bIndex;
+              })
+          }))
+          .filter(group => group.courses.length)
+          .sort((a, b) => {
+            const aIndex = preferredOrder.indexOf(a.semester);
+            const bIndex = preferredOrder.indexOf(b.semester);
+            if (aIndex === -1 && bIndex === -1) return 0;
+            if (aIndex === -1) return 1;
+            if (bIndex === -1) return -1;
+            return aIndex - bIndex;
+          });
+
+        courses = groups.flatMap(group => group.courses);
+        activeSemester = groups.some(group => group.semester === activeSemester) ? activeSemester : '全部';
+        document.querySelector('#course-total').textContent = courses.length;
+        document.querySelector('#release-total').textContent = groups.length;
+        buildFilters();
+        render();
+      } catch (error) {
+        console.error('同步 Releases 失败', error);
+        count.textContent = '同步失败';
+        grid.innerHTML = `<div class="status-card">暂时无法读取 GitHub Releases。<br><a href="${repository}/releases">前往 Releases 页面下载</a>，或稍后刷新重试。</div>`;
+      }
     }
 
     input.addEventListener('input', render);
@@ -466,8 +598,7 @@
       render();
     });
 
-    document.querySelector('#course-total').textContent = courses.length;
-    render();
+    loadReleases();
   </script>
 </body>
 </html>
